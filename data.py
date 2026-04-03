@@ -5,6 +5,20 @@ import logging
 import numpy as np
 import pandas as pd
 import yfinance as yf
+try:
+    import pkg_resources
+except ImportError:
+    import importlib.metadata, types, sys
+    _pkg = types.ModuleType("pkg_resources")
+    def _get_dist(name):
+        ns = types.SimpleNamespace()
+        try:
+            ns.version = importlib.metadata.version(name)
+        except Exception:
+            ns.version = "0.0.0"
+        return ns
+    _pkg.get_distribution = _get_dist
+    sys.modules["pkg_resources"] = _pkg
 from pykrx import stock as krx
 
 from analysis import calc_cn, calc_indicators, stage_meaning
