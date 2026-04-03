@@ -5,8 +5,17 @@ import logging
 import numpy as np
 import pandas as pd
 import yfinance as yf
+def _pykrx_resource_filename(package, resource):
+    import importlib.util, os
+    spec = importlib.util.find_spec(package)
+    if spec and spec.origin:
+        return os.path.join(os.path.dirname(spec.origin), resource)
+    return resource
+
 try:
     import pkg_resources
+    if not hasattr(pkg_resources, 'resource_filename'):
+        pkg_resources.resource_filename = _pykrx_resource_filename
 except ImportError:
     import importlib.metadata, types, sys
     _pkg = types.ModuleType("pkg_resources")
@@ -17,14 +26,8 @@ except ImportError:
         except Exception:
             ns.version = "0.0.0"
         return ns
-    def _resource_filename(package, resource):
-        import importlib.util, os
-        spec = importlib.util.find_spec(package)
-        if spec and spec.origin:
-            return os.path.join(os.path.dirname(spec.origin), resource)
-        return resource
     _pkg.get_distribution = _get_dist
-    _pkg.resource_filename = _resource_filename
+    _pkg.resource_filename = _pykrx_resource_filename
     sys.modules["pkg_resources"] = _pkg
 from pykrx import stock as krx
 
