@@ -17,7 +17,14 @@ except ImportError:
         except Exception:
             ns.version = "0.0.0"
         return ns
+    def _resource_filename(package, resource):
+        import importlib.util, os
+        spec = importlib.util.find_spec(package)
+        if spec and spec.origin:
+            return os.path.join(os.path.dirname(spec.origin), resource)
+        return resource
     _pkg.get_distribution = _get_dist
+    _pkg.resource_filename = _resource_filename
     sys.modules["pkg_resources"] = _pkg
 from pykrx import stock as krx
 
