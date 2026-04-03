@@ -145,8 +145,8 @@ def style_table(df: pd.DataFrame):
 
     return (
         df.style
-        .applymap(color_stage, subset=["단계"])
-        .applymap(color_cn,    subset=["CN (%)"])
+        .map(color_stage, subset=["단계"])
+        .map(color_cn,    subset=["CN (%)"])
         .format({"CN (%)": "{:.1f}"})
     )
 
